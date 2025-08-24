@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪷📚 Bookella - نظام النقاط والمكافآت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-green-600 text-lg">🪷📚</span>
+                        </span>
+                        <h1 class="text-2xl font-bold">Bookella</h1>
+                    </div>
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div id="userInfo" class="hidden">
+                            <span id="userName" class="text-sm opacity-90"></span>
+                            <span id="userPoints" class="bg-white text-green-600 px-3 py-1 rounded-lg text-sm font-semibold mr-3"></span>
+                        </div>
+                        <button onclick="logout()" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-sign-out-alt ml-2"></i>
+                        تسجيل الخروج
+                    </button>
+                        <a href="index.html" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-home ml-2"></i> الرئيسية
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">نظام النقاط والمكافآت</h2>
+            <p class="text-xl text-gray-600">اكسب نقاط مع كل عملية شراء واحصل على مكافآت حصرية!</p>
+        </div>
+
+        <!-- User Points Display -->
+        <div id="userPointsDisplay" class="hidden">
+            <div class="bg-white rounded-xl shadow-md p-8 mb-8 text-center">
+                <div class="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-star text-white text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">مرحباً <span id="displayUserName"></span>!</h3>
+                <p class="text-gray-600 mb-4">نقاطك الحالية</p>
+                <div class="text-5xl font-bold text-yellow-500 mb-4" id="displayUserPoints">0</div>
+                <p class="text-gray-600">مستوى العضوية: <span id="userLevel" class="font-semibold text-green-600"></span></p>
+            </div>
+        </div>
+
+        <!-- Points Calculator -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">حاسبة النقاط</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-700 mb-4">احسب النقاط التي ستحصل عليها</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">قيمة الطلب (جنيه مصري)</label>
+                            <input type="number" id="orderValue" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500" placeholder="أدخل قيمة الطلب">
+                        </div>
+                        <button onclick="calculatePoints()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                            <i class="fas fa-calculator ml-2"></i>
+                            احسب النقاط
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-700 mb-4">النتيجة</h4>
+                    <div id="pointsResult" class="bg-gray-50 rounded-lg p-6 text-center hidden">
+                        <div class="text-4xl font-bold text-green-600 mb-2" id="calculatedPoints">0</div>
+                        <p class="text-gray-600">نقطة</p>
+                        <p class="text-sm text-gray-500 mt-2">ستحصل على هذه النقاط مع طلبك</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Membership Levels -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">مستويات العضوية</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center p-6 border-2 border-gray-200 rounded-xl hover:border-green-500 transition-colors">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user text-gray-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">جديد</h4>
+                    <p class="text-gray-600 text-sm">0-99 نقطة</p>
+                    <p class="text-green-600 font-semibold mt-2">خصم 5%</p>
+                </div>
+
+                <div class="text-center p-6 border-2 border-yellow-200 rounded-xl hover:border-yellow-500 transition-colors">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-medal text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">برونزي</h4>
+                    <p class="text-gray-600 text-sm">100-299 نقطة</p>
+                    <p class="text-green-600 font-semibold mt-2">خصم 10%</p>
+                </div>
+
+                <div class="text-center p-6 border-2 border-gray-300 rounded-xl hover:border-gray-500 transition-colors">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-award text-gray-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">فضي</h4>
+                    <p class="text-gray-600 text-sm">300-599 نقطة</p>
+                    <p class="text-green-600 font-semibold mt-2">خصم 15%</p>
+                </div>
+
+                <div class="text-center p-6 border-2 border-yellow-400 rounded-xl hover:border-yellow-500 transition-colors">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-crown text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">ذهبي</h4>
+                    <p class="text-gray-600 text-sm">600+ نقطة</p>
+                    <p class="text-green-600 font-semibold mt-2">خصم 20%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rewards Catalog -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">كتالوج المكافآت</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gift text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">خصم 50 جنيه</h4>
+                    <p class="text-gray-600 mb-4">خصم على طلبك القادم</p>
+                    <div class="text-2xl font-bold text-green-600">500 نقطة</div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shipping-fast text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">شحن مجاني</h4>
+                    <p class="text-gray-600 mb-4">شحن مجاني لطلب واحد</p>
+                    <div class="text-2xl font-bold text-blue-600">300 نقطة</div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 text-center">
+                    <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">كتاب مجاني</h4>
+                    <p class="text-gray-600 mb-4">كتاب من اختيارك</p>
+                    <div class="text-2xl font-bold text-purple-600">1000 نقطة</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-8">
+            <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">كيف يعمل النظام؟</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">1</span>
+                    </div>
+                    <h4 class="text-lg font-semibold text-blue-800 mb-2">اشترِ كتب</h4>
+                    <p class="text-blue-700">اقم بشراء الكتب من متجرنا</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">2</span>
+                    </div>
+                    <h4 class="text-lg font-semibold text-blue-800 mb-2">اكسب نقاط</h4>
+                    <p class="text-blue-700">احصل على نقاط مع كل عملية شراء</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">3</span>
+                    </div>
+                    <h4 class="text-lg font-semibold text-blue-800 mb-2">استبدل المكافآت</h4>
+                    <p class="text-blue-700">استبدل نقاطك بمكافآت حصرية</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        // Check if user is logged in
+        function checkAuth() {
+            const user = localStorage.getItem('bookella_current_user');
+            if (!user) {
+                // Redirect to login if not logged in
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(user);
+            displayUserInfo();
+        }
+
+        // Display user information
+        function displayUserInfo() {
+            if (!currentUser) return;
+
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userPoints').textContent = `${currentUser.points} نقطة`;
+
+            document.getElementById('userPointsDisplay').classList.remove('hidden');
+            document.getElementById('displayUserName').textContent = currentUser.name;
+            document.getElementById('displayUserPoints').textContent = currentUser.points;
+            document.getElementById('userLevel').textContent = getLevelName(currentUser.points);
+        }
+
+        // Get level name based on points
+        function getLevelName(points) {
+            if (points >= 600) return 'ذهبي';
+            if (points >= 300) return 'فضي';
+            if (points >= 100) return 'برونزي';
+            return 'جديد';
+        }
+
+        // Calculate points
+        function calculatePoints() {
+            const orderValue = parseFloat(document.getElementById('orderValue').value);
+            if (!orderValue || orderValue <= 0) {
+                alert('يرجى إدخال قيمة صحيحة للطلب');
+                return;
+            }
+
+            // Calculate points (1 point per 10 EGP)
+            const points = Math.floor(orderValue / 10);
+
+            document.getElementById('calculatedPoints').textContent = points;
+            document.getElementById('pointsResult').classList.remove('hidden');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('bookella_current_user');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+    </script>
+</body>
+
+</html>

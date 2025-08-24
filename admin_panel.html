@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 لوحة الأدمن - Bookella</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                        <span class="text-white text-lg">👑</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800">لوحة الأدمن</h1>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex items-center space-x-6 space-x-reverse">
+                    <a href="index.html" class="text-gray-700 hover:text-green-600 font-medium">العودة للرئيسية</a>
+                    <div id="adminUserInfo" class="flex items-center space-x-3 space-x-reverse">
+                        <span id="adminUserName" class="text-purple-600 font-semibold"></span>
+                        <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors" title="تسجيل الخروج">
+                            <i class="fas fa-sign-out-alt ml-2"></i>
+                            خروج
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Admin Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Stats Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600">إجمالي الطلبات</p>
+                        <p id="totalOrders" class="text-3xl font-bold text-green-600">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600">إجمالي المبيعات</p>
+                        <p id="totalRevenue" class="text-3xl font-bold text-blue-600">0 جنيه</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600">المستخدمين المسجلين</p>
+                        <p id="totalUsers" class="text-3xl font-bold text-purple-600">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-users text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tabs -->
+        <div class="flex flex-wrap gap-4 mb-8">
+            <button onclick="showAdminTab('dashboard')" id="dashboardTab" class="admin-tab-button active bg-purple-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg">
+                <i class="fas fa-tachometer-alt ml-2"></i>
+                لوحة التحكم
+            </button>
+            <button onclick="showAdminTab('data')" id="dataTab" class="admin-tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold shadow-lg">
+                <i class="fas fa-table ml-2"></i>
+                عرض البيانات
+            </button>
+        </div>
+
+        <!-- Dashboard Tab Content -->
+        <div id="dashboardTabContent" class="admin-tab-content">
+            <!-- Admin Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Manage Books -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow cursor-pointer">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-book text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">إدارة الكتب</h3>
+                    <p class="text-gray-600 text-sm">إضافة، تعديل، حذف الكتب</p>
+                </div>
+
+                <!-- Manage Orders -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow cursor-pointer">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shopping-bag text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">إدارة الطلبات</h3>
+                    <p class="text-gray-600 text-sm">متابعة وتحديث الطلبات</p>
+                </div>
+
+                <!-- Manage Users -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow cursor-pointer">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-cog text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">إدارة المستخدمين</h3>
+                    <p class="text-gray-600 text-sm">إدارة حسابات المستخدمين</p>
+                </div>
+
+                <!-- Analytics -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow cursor-pointer">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-orange-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">التقارير</h3>
+                    <p class="text-gray-600 text-sm">إحصائيات وتحليلات</p>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">أحدث الطلبات</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-right py-3 px-4 font-semibold text-gray-700">رقم الطلب</th>
+                                <th class="text-right py-3 px-4 font-semibold text-gray-700">اسم العميل</th>
+                                <th class="text-right py-3 px-4 font-semibold text-gray-700">الكتب</th>
+                                <th class="text-right py-3 px-4 font-semibold text-gray-700">السعر</th>
+                                <th class="text-right py-3 px-4 font-semibold text-gray-700">التاريخ</th>
+                                <th class="text-right py-3 px-4 font-semibold text-gray-700">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-gray-500">لا توجد طلبات بعد</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Add New Book -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">إضافة كتاب جديد</h3>
+                    <form id="addBookForm" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">اسم الكتاب</label>
+                            <input type="text" id="bookName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500" placeholder="أدخل اسم الكتاب" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">المؤلف</label>
+                            <input type="text" id="bookAuthor" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500" placeholder="أدخل اسم المؤلف" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">السعر (جنيه)</label>
+                            <input type="number" id="bookPrice" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500" placeholder="أدخل السعر" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">الفئة</label>
+                            <select id="bookCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500" required title="اختر فئة الكتاب">
+                             <option value="">اختر الفئة</option>
+                             <option value="self-help">تطوير الذات</option>
+                             <option value="technology">تكنولوجيا</option>
+                             <option value="literature">أدب</option>
+                             <option value="history">تاريخ</option>
+                             <option value="science">علوم</option>
+                         </select>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                         إضافة الكتاب
+                     </button>
+                    </form>
+                </div>
+
+                <!-- System Notifications -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">إشعارات النظام</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-info-circle text-blue-600 ml-3"></i>
+                            <span class="text-sm text-gray-700">تم إضافة 5 كتب جديدة اليوم</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                            <i class="fas fa-check-circle text-green-600 ml-3"></i>
+                            <span class="text-sm text-gray-700">تم إتمام 12 طلب بنجاح</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-yellow-50 rounded-lg">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 ml-3"></i>
+                            <span class="text-sm text-gray-700">3 طلبات تحتاج مراجعة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Tab Content -->
+        <div id="dataTabContent" class="admin-tab-content hidden">
+            <!-- Tabs for Data Views -->
+            <div class="flex flex-wrap gap-4 mb-8">
+                <button onclick="showDataTab('users')" id="usersDataTab" class="data-tab-button active bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg">
+                    <i class="fas fa-users ml-2"></i>
+                    المستخدمين
+                </button>
+                <button onclick="showDataTab('books')" id="booksDataTab" class="data-tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold shadow-lg">
+                    <i class="fas fa-book ml-2"></i>
+                    الكتب
+                </button>
+                <button onclick="showDataTab('orders')" id="ordersDataTab" class="data-tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold shadow-lg">
+                    <i class="fas fa-shopping-cart ml-2"></i>
+                    الطلبات
+                </button>
+                <button onclick="showDataTab('borrowing')" id="borrowingDataTab" class="data-tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold shadow-lg">
+                    <i class="fas fa-handshake ml-2"></i>
+                    الاستعارة
+                </button>
+            </div>
+
+            <!-- Export Button -->
+            <div class="mb-6">
+                <button onclick="exportToExcel()" class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition-all font-bold shadow-lg">
+                    <i class="fas fa-download ml-2"></i>
+                    تصدير Excel
+                </button>
+            </div>
+
+            <!-- Users Data Tab -->
+            <div id="usersDataTabContent" class="data-tab-content">
+                <div class="bg-white rounded-3xl shadow-2xl p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">👥 بيانات المستخدمين</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الاسم</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">البريد الإلكتروني</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الهاتف</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">النقاط</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">المستوى</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">تاريخ الانضمام</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">إجمالي الطلبات</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">إجمالي المشتريات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersDataTableBody">
+                                <!-- سيتم ملؤها بالبيانات -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Books Data Tab -->
+            <div id="booksDataTabContent" class="data-tab-content hidden">
+                <div class="bg-white rounded-3xl shadow-2xl p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">📚 بيانات الكتب</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 font-bold text-gray-700">العنوان</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">المؤلف</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">السعر</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الفئة</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="booksDataTableBody">
+                                <!-- سيتم ملؤها بالبيانات -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Data Tab -->
+            <div id="ordersDataTabContent" class="data-tab-content hidden">
+                <div class="bg-white rounded-3xl shadow-2xl p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">🛒 بيانات الطلبات</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 font-bold text-gray-700">اسم العميل</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الهاتف</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">عدد الكتب</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">إجمالي السعر</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">تاريخ الطلب</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersDataTableBody">
+                                <!-- سيتم ملؤها بالبيانات -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Borrowing Data Tab -->
+            <div id="borrowingDataTabContent" class="data-tab-content hidden">
+                <div class="bg-white rounded-3xl shadow-2xl p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">🤝 بيانات الاستعارة</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 font-bold text-gray-700">اسم العميل</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">نوع الخدمة</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">المدة</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">السعر</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">تاريخ الاستعارة</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">تاريخ الإرجاع</th>
+                                    <th class="px-4 py-3 font-bold text-gray-700">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="borrowingDataTableBody">
+                                <!-- سيتم ملؤها بالبيانات -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-300">&copy; 2024 Bookella Admin Panel. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('bookella_current_user');
+            if (!currentUser) {
+                // Redirect to login if not logged in
+                alert('يجب تسجيل الدخول أولاً!');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = JSON.parse(currentUser);
+            if (user.email !== 'georgerafat255@gmail.com') {
+                // Redirect non-admin users with warning
+                alert('عذراً، هذه الصفحة متاحة للأدمن فقط!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // If admin, show admin info and load data
+            const adminUserName = document.getElementById('adminUserName');
+            if (adminUserName) {
+                adminUserName.textContent = `مرحباً ${user.name}`;
+            }
+
+            // Load real data
+            loadAdminData();
+
+            // Add event listeners
+            setupEventListeners();
+        });
+
+        // Load real admin data
+        function loadAdminData() {
+            // Load orders
+            const orders = JSON.parse(localStorage.getItem('bookellaOrders') || '[]');
+            const totalOrders = orders.length;
+            const totalRevenue = orders.reduce((sum, order) => {
+                const price = parseInt(order.totalPrice.replace(' جنيه', ''));
+                return sum + (isNaN(price) ? 0 : price);
+            }, 0);
+
+            // Load users
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const totalUsers = users.length;
+
+            // Update dashboard
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('totalRevenue').textContent = `${totalRevenue} جنيه`;
+            document.getElementById('totalUsers').textContent = totalUsers;
+
+            // Load orders table
+            loadOrdersTable(orders);
+        }
+
+        // Load orders table
+        function loadOrdersTable(orders) {
+            const tbody = document.getElementById('ordersTableBody');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-gray-500">لا توجد طلبات بعد</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.slice(-10).reverse().map(order => `
+                 <tr class="border-b border-gray-100 hover:bg-gray-50">
+                     <td class="py-3 px-4">${order.orderId}</td>
+                     <td class="py-3 px-4">${order.customerName}</td>
+                     <td class="py-3 px-4">${order.bookNames.replace(/\n/g, ', ')}</td>
+                     <td class="py-3 px-4">${order.totalPrice}</td>
+                     <td class="py-3 px-4">${new Date(order.orderDate).toLocaleDateString('ar-EG')}</td>
+                     <td class="py-3 px-4">
+                         <button onclick="viewOrderDetails('${order.orderId}')" class="text-blue-600 hover:text-blue-800 ml-2" title="عرض التفاصيل">
+                             <i class="fas fa-eye"></i>
+                         </button>
+                         <button onclick="deleteOrder('${order.orderId}')" class="text-red-600 hover:text-red-800 ml-2" title="حذف الطلب">
+                             <i class="fas fa-trash"></i>
+                         </button>
+                     </td>
+                 </tr>
+             `).join('');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Add book form
+            const addBookForm = document.getElementById('addBookForm');
+            if (addBookForm) {
+                addBookForm.addEventListener('submit', handleAddBook);
+            }
+        }
+
+        // Handle add book
+        function handleAddBook(e) {
+            e.preventDefault();
+
+            const bookData = {
+                id: Date.now(),
+                name: document.getElementById('bookName').value,
+                author: document.getElementById('bookAuthor').value,
+                price: parseInt(document.getElementById('bookPrice').value),
+                category: document.getElementById('bookCategory').value,
+                dateAdded: new Date().toISOString()
+            };
+
+            // Save book to localStorage
+            const books = JSON.parse(localStorage.getItem('bookellaBooks') || '[]');
+            books.push(bookData);
+            localStorage.setItem('bookellaBooks', JSON.stringify(books));
+
+            // Show success message
+            showNotification('تم إضافة الكتاب بنجاح!', 'success');
+
+            // Reset form
+            e.target.reset();
+        }
+
+        // View order details
+        function viewOrderDetails(orderId) {
+            const orders = JSON.parse(localStorage.getItem('bookellaOrders') || '[]');
+            const order = orders.find(o => o.orderId === orderId);
+
+            if (order) {
+                const details = `
+                     رقم الطلب: ${order.orderId}
+                     اسم العميل: ${order.customerName}
+                     الهاتف: ${order.customerPhone}
+                     العنوان: ${order.customerAddress}
+                     الكتب: ${order.bookNames}
+                     السعر: ${order.totalPrice}
+                     التاريخ: ${new Date(order.orderDate).toLocaleDateString('ar-EG')}
+                 `;
+
+                alert(details);
+            }
+        }
+
+        // Delete order
+        function deleteOrder(orderId) {
+            if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                const orders = JSON.parse(localStorage.getItem('bookellaOrders') || '[]');
+                const filteredOrders = orders.filter(o => o.orderId !== orderId);
+                localStorage.setItem('bookellaOrders', JSON.stringify(filteredOrders));
+
+                showNotification('تم حذف الطلب بنجاح!', 'success');
+                loadAdminData(); // Reload data
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg`;
+
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#ef4444';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#3b82f6';
+            }
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Check admin access
+        function checkAdminAccess() {
+            const currentUser = localStorage.getItem('bookella_current_user');
+            if (!currentUser) {
+                alert('يجب تسجيل الدخول أولاً!');
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            const user = JSON.parse(currentUser);
+            if (user.email !== 'georgerafat255@gmail.com') {
+                alert('عذراً، هذه الصفحة متاحة للأدمن فقط!');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Show Admin Tab
+        function showAdminTab(tabName) {
+            // Hide all admin tab contents
+            const adminTabContents = document.querySelectorAll('.admin-tab-content');
+            adminTabContents.forEach(content => content.classList.add('hidden'));
+
+            // Remove active class from all admin tab buttons
+            const adminTabButtons = document.querySelectorAll('.admin-tab-button');
+            adminTabButtons.forEach(button => {
+                button.classList.remove('bg-purple-600', 'text-white');
+                button.classList.add('bg-gray-200', 'text-gray-700');
+            });
+
+            // Show selected admin tab content
+            const selectedContent = document.getElementById(tabName + 'TabContent');
+            if (selectedContent) {
+                selectedContent.classList.remove('hidden');
+            }
+
+            // Add active class to selected admin tab button
+            const selectedButton = document.getElementById(tabName + 'Tab');
+            if (selectedButton) {
+                selectedButton.classList.remove('bg-gray-200', 'text-gray-700');
+                selectedButton.classList.add('bg-purple-600', 'text-white');
+            }
+
+            // Load data if switching to data tab
+            if (tabName === 'data') {
+                showDataTab('users'); // Default to users
+            }
+        }
+
+        // Show Data Tab
+        function showDataTab(tabName) {
+            // Hide all data tab contents
+            const dataTabContents = document.querySelectorAll('.data-tab-content');
+            dataTabContents.forEach(content => content.classList.add('hidden'));
+
+            // Remove active class from all data tab buttons
+            const dataTabButtons = document.querySelectorAll('.data-tab-button');
+            dataTabButtons.forEach(button => {
+                button.classList.remove('bg-blue-600', 'text-white');
+                button.classList.add('bg-gray-200', 'text-gray-700');
+            });
+
+            // Show selected data tab content
+            const selectedContent = document.getElementById(tabName + 'DataTabContent');
+            if (selectedContent) {
+                selectedContent.classList.remove('hidden');
+            }
+
+            // Add active class to selected data tab button
+            const selectedButton = document.getElementById(tabName + 'DataTab');
+            if (selectedButton) {
+                selectedButton.classList.remove('bg-gray-200', 'text-gray-700');
+                selectedButton.classList.add('bg-blue-600', 'text-white');
+            }
+
+            // Load data for the selected tab
+            loadDataTabData(tabName);
+        }
+
+        // Load data for each data tab
+        function loadDataTabData(tabName) {
+            const excelData = JSON.parse(localStorage.getItem('bookella_excel_data') || '{}');
+
+            switch (tabName) {
+                case 'users':
+                    loadUsersDataTable(excelData.Users || []);
+                    break;
+                case 'books':
+                    loadBooksDataTable(excelData.Books || []);
+                    break;
+                case 'orders':
+                    loadOrdersDataTable(excelData.Orders || []);
+                    break;
+                case 'borrowing':
+                    loadBorrowingDataTable(excelData.Borrowing || []);
+                    break;
+            }
+        }
+
+        // Load Users Data Table
+        function loadUsersDataTable(users) {
+            const tbody = document.getElementById('usersDataTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = users.map(user => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3">${user.name}</td>
+                    <td class="px-4 py-3">${user.email}</td>
+                    <td class="px-4 py-3">${user.phone}</td>
+                    <td class="px-4 py-3">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-sm font-bold">
+                            ${user.points} نقطة
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm font-bold">
+                            ${user.level}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">${new Date(user.joinDate).toLocaleDateString('ar-EG')}</td>
+                    <td class="px-4 py-3">${user.totalOrders}</td>
+                    <td class="px-4 py-3">${user.totalSpent} جنيه</td>
+                </tr>
+            `).join('');
+        }
+
+        // Load Books Data Table
+        function loadBooksDataTable(books) {
+            const tbody = document.getElementById('booksDataTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = books.map(book => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3 font-bold">${book.title}</td>
+                    <td class="px-4 py-3">${book.author}</td>
+                    <td class="px-4 py-3 text-green-600 font-bold">${book.price} جنيه</td>
+                    <td class="px-4 py-3">${book.category}</td>
+                    <td class="px-4 py-3">
+                        ${book.isNew ? '<span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-sm font-bold">جديد</span>' : ''}
+                        ${book.isBestSeller ? '<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-sm font-bold">الأكثر مبيعاً</span>' : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load Orders Data Table
+        function loadOrdersDataTable(orders) {
+            const tbody = document.getElementById('ordersDataTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = orders.map(order => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3 font-bold">${order.customerName}</td>
+                    <td class="px-4 py-3">${order.customerPhone}</td>
+                    <td class="px-4 py-3">${order.bookCount}</td>
+                    <td class="px-4 py-3 text-green-600 font-bold">${order.totalPrice}</td>
+                    <td class="px-4 py-3">${new Date(order.orderDate).toLocaleDateString('ar-EG')}</td>
+                    <td class="px-4 py-3">
+                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-sm font-bold">
+                            ${order.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load Borrowing Data Table
+        function loadBorrowingDataTable(borrowings) {
+            const tbody = document.getElementById('borrowingDataTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = borrowings.map(borrowing => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3 font-bold">${borrowing.customerName}</td>
+                    <td class="px-4 py-3">
+                        <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-sm font-bold">
+                            ${borrowing.serviceType === 'study' ? 'في الدراسة' : 
+                              borrowing.serviceType === 'vacation' ? 'في الإجازة' : 'كتب كبيرة'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">${borrowing.duration}</td>
+                    <td class="px-4 py-3 text-green-600 font-bold">${borrowing.price} جنيه</td>
+                    <td class="px-4 py-3">${new Date(borrowing.borrowDate).toLocaleDateString('ar-EG')}</td>
+                    <td class="px-4 py-3">${new Date(borrowing.returnDate).toLocaleDateString('ar-EG')}</td>
+                    <td class="px-4 py-3">
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-sm font-bold">
+                            ${borrowing.status}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Export to Excel function
+        function exportToExcel() {
+            const excelData = JSON.parse(localStorage.getItem('bookella_excel_data') || '{}');
+
+            // Create CSV content
+            let csvContent = '';
+
+            // Users sheet
+            csvContent += 'Users Sheet\n';
+            csvContent += 'Name,Email,Phone,Points,Level,JoinDate,TotalOrders,TotalSpent\n';
+            (excelData.Users || []).forEach(user => {
+                csvContent += `${user.name},${user.email},${user.phone},${user.points},${user.level},${user.joinDate},${user.totalOrders},${user.totalSpent}\n`;
+            });
+
+            csvContent += '\nBooks Sheet\n';
+            csvContent += 'Title,Author,Price,Category,IsNew,IsBestSeller\n';
+            (excelData.Books || []).forEach(book => {
+                csvContent += `${book.title},${book.author},${book.price},${book.category},${book.isNew},${book.isBestSeller}\n`;
+            });
+
+            csvContent += '\nOrders Sheet\n';
+            csvContent += 'CustomerName,CustomerPhone,BookCount,TotalPrice,OrderDate,Status\n';
+            (excelData.Orders || []).forEach(order => {
+                csvContent += `${order.customerName},${order.customerPhone},${order.bookCount},${order.totalPrice},${order.orderDate},${order.status}\n`;
+            });
+
+            csvContent += '\nBorrowing Sheet\n';
+            csvContent += 'CustomerName,ServiceType,Duration,Price,BorrowDate,ReturnDate,Status\n';
+            (excelData.Borrowing || []).forEach(borrowing => {
+                csvContent += `${borrowing.customerName},${borrowing.serviceType},${borrowing.duration},${borrowing.price},${borrowing.borrowDate},${borrowing.returnDate},${borrowing.status}\n`;
+            });
+
+            // Download CSV file
+            const blob = new Blob([csvContent], {
+                type: 'text/csv;charset=utf-8;'
+            });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'Bookella_Data.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showNotification('تم تصدير البيانات بنجاح!', 'success');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('bookella_current_user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

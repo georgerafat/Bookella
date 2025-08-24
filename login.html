@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪷📚 Bookella - تسجيل الدخول</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                        <span class="text-green-600 text-2xl">🪷📚</span>
+                    </div>
+                    <h1 class="text-3xl font-bold">Bookella</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-lg mx-auto">
+            <!-- Login/Register/Forgot Password Tabs -->
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+                <div class="flex bg-gradient-to-r from-green-50 to-blue-50">
+                    <button id="loginTab" class="flex-1 py-4 text-center font-bold text-gray-700 bg-white border-b-4 border-green-500 transition-all shadow-lg" onclick="showTab('login')">
+                        <i class="fas fa-sign-in-alt ml-1 text-green-600 text-sm"></i>
+                        <span class="text-sm">تسجيل الدخول</span>
+                    </button>
+                    <button id="registerTab" class="flex-1 py-4 text-center font-bold text-gray-500 hover:text-gray-700 transition-all" onclick="showTab('register')">
+                        <i class="fas fa-user-plus ml-1 text-sm"></i>
+                        <span class="text-sm">إنشاء حساب</span>
+                    </button>
+                    <button id="forgotTab" class="flex-1 py-4 text-center font-bold text-gray-500 hover:text-gray-700 transition-all" onclick="showTab('forgot')">
+                        <i class="fas fa-key ml-1 text-sm"></i>
+                        <span class="text-sm">نسيت كلمة المرور</span>
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="p-10">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-sign-in-alt text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">مرحباً بك مرة أخرى!</h2>
+                        <p class="text-gray-600">سجل دخولك للوصول لحسابك</p>
+                    </div>
+
+                    <form id="loginFormElement" onsubmit="handleLogin(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">البريد الإلكتروني</label>
+                            <div class="relative">
+                                <i class="fas fa-envelope absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="email" id="loginEmail" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all" placeholder="أدخل بريدك الإلكتروني" onblur="validateLoginEmail(this.value)">
+                            </div>
+                            <p id="loginEmailError" class="text-red-500 text-sm mt-1 hidden">يرجى إدخال بريد إلكتروني صحيح</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">كلمة المرور</label>
+                            <div class="relative">
+                                <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="password" id="loginPassword" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all" placeholder="أدخل كلمة المرور">
+                                <button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginPasswordToggle')" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" id="loginPasswordToggle" title="إظهار/إخفاء كلمة المرور">
+                                     <i class="fas fa-eye"></i>
+                                 </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-sign-in-alt ml-2"></i>
+                            تسجيل الدخول
+                        </button>
+                    </form>
+
+
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="p-10 hidden">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-plus text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">إنشاء حساب جديد</h2>
+                        <p class="text-gray-600">انضم إلينا واستمتع بجميع المميزات</p>
+                    </div>
+
+                    <form id="registerFormElement" onsubmit="handleRegister(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">الاسم الكامل</label>
+                            <div class="relative">
+                                <i class="fas fa-user absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="registerName" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أدخل اسمك الكامل">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">رقم الهاتف</label>
+                            <div class="relative">
+                                <i class="fas fa-phone absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="tel" id="registerPhone" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أدخل رقم هاتفك">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">البريد الإلكتروني</label>
+                            <div class="relative">
+                                <i class="fas fa-envelope absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="email" id="registerEmail" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أدخل بريدك الإلكتروني" onblur="validateEmail(this.value)">
+                            </div>
+                            <p id="emailError" class="text-red-500 text-sm mt-1 hidden">يرجى إدخال بريد إلكتروني صحيح</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">كلمة المرور</label>
+                            <div class="relative">
+                                <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="password" id="registerPassword" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أدخل كلمة مرور قوية">
+                                <button type="button" onclick="togglePasswordVisibility('registerPassword', 'registerPasswordToggle')" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" id="registerPasswordToggle" title="إظهار/إخفاء كلمة المرور">
+                                     <i class="fas fa-eye"></i>
+                                 </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 rounded-xl font-bold hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-user-plus ml-2"></i>
+                            إنشاء الحساب
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Forgot Password Form -->
+                <div id="forgotForm" class="p-10 hidden">
+                    <!-- Step 1: User Verification -->
+                    <div id="verificationStep">
+                        <div class="text-center mb-8">
+                            <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-key text-white text-2xl"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">نسيت كلمة المرور؟</h2>
+                            <p class="text-gray-600">أدخل بياناتك للتحقق من هويتك</p>
+                        </div>
+
+                        <form onsubmit="verifyUserData(event)" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-3">البريد الإلكتروني</label>
+                                <div class="relative">
+                                    <i class="fas fa-envelope absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input type="email" id="forgotEmail" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all" placeholder="أدخل بريدك الإلكتروني">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-3">الاسم الكامل</label>
+                                <div class="relative">
+                                    <i class="fas fa-user absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input type="text" id="forgotName" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all" placeholder="أدخل اسمك الكامل">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-3">رقم الهاتف</label>
+                                <div class="relative">
+                                    <i class="fas fa-phone absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input type="tel" id="forgotPhone" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all" placeholder="أدخل رقم هاتفك">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg">
+                                 <i class="fas fa-check ml-2"></i>
+                                 التحقق من البيانات
+                             </button>
+                        </form>
+                    </div>
+
+                    <!-- Step 2: New Password -->
+                    <div id="passwordStep" class="hidden">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-lock text-white text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">كلمة مرور جديدة</h3>
+                            <p class="text-gray-600">تم التحقق من بياناتك، أدخل كلمة المرور الجديدة</p>
+                        </div>
+
+                        <form onsubmit="resetPassword(event)" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-3">كلمة المرور الجديدة</label>
+                                <div class="relative">
+                                    <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input type="password" id="newPassword" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all" placeholder="أدخل كلمة المرور الجديدة">
+                                    <button type="button" onclick="togglePasswordVisibility('newPassword', 'newPasswordToggle')" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" id="newPasswordToggle" title="إظهار/إخفاء كلمة المرور">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-bold mb-3">تأكيد كلمة المرور</label>
+                                <div class="relative">
+                                    <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input type="password" id="confirmPassword" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all" placeholder="أعد كتابة كلمة المرور">
+                                    <button type="button" onclick="togglePasswordVisibility('confirmPassword', 'confirmPasswordToggle')" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors" id="confirmPasswordToggle" title="إظهار/إخفاء كلمة المرور">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-save ml-2"></i>
+                                حفظ كلمة المرور الجديدة
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="mt-12 text-center">
+                <h3 class="text-2xl font-bold text-gray-800 mb-8">مميزات Bookella</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all transform hover:scale-105">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-star text-white text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 mb-2">نظام النقاط والمكافآت</h4>
+                        <p class="text-sm text-gray-600">احصل على نقاط مع كل عملية شراء</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all transform hover:scale-105">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-book text-white text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 mb-2">كتب عربية وإنجليزية</h4>
+                        <p class="text-sm text-gray-600">مجموعة متنوعة من الكتب</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all transform hover:scale-105">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-shipping-fast text-white text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 mb-2">توصيل سريع</h4>
+                        <p class="text-sm text-gray-600">وصول الكتب في أسرع وقت</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all transform hover:scale-105">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-headset text-white text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 mb-2">دعم 24/7</h4>
+                        <p class="text-sm text-gray-600">خدمة عملاء متاحة دائماً</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg hidden"></div>
+
+    <script>
+        // Show/Hide tabs
+        function showTab(tabName) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const forgotForm = document.getElementById('forgotForm');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const forgotTab = document.getElementById('forgotTab');
+
+            // Hide all forms
+            loginForm.classList.add('hidden');
+            registerForm.classList.add('hidden');
+            forgotForm.classList.add('hidden');
+
+            // Reset all tabs
+            loginTab.classList.remove('bg-white', 'border-green-500', 'shadow-lg');
+            loginTab.classList.add('text-gray-500');
+            registerTab.classList.remove('bg-white', 'border-blue-500', 'shadow-lg');
+            registerTab.classList.add('text-gray-500');
+            forgotTab.classList.remove('bg-white', 'border-orange-500', 'shadow-lg');
+            forgotTab.classList.add('text-gray-500');
+
+            if (tabName === 'login') {
+                loginForm.classList.remove('hidden');
+                loginTab.classList.add('bg-white', 'border-green-500', 'shadow-lg');
+                loginTab.classList.remove('text-gray-500');
+            } else if (tabName === 'register') {
+                registerForm.classList.remove('hidden');
+                registerTab.classList.add('bg-white', 'border-blue-500', 'shadow-lg');
+                registerTab.classList.remove('text-gray-500');
+            } else if (tabName === 'forgot') {
+                forgotForm.classList.remove('hidden');
+                forgotTab.classList.add('bg-white', 'border-orange-500', 'shadow-lg');
+                forgotTab.classList.remove('text-gray-500');
+                // Reset forgot password steps
+                document.getElementById('verificationStep').classList.remove('hidden');
+                document.getElementById('passwordStep').classList.add('hidden');
+            }
+        }
+
+        // Handle Login
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Get users from both localStorage and Excel structure
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const excelData = JSON.parse(localStorage.getItem('bookella_excel_data') || '{}');
+            const excelUsers = excelData.Users || [];
+
+            // Check in localStorage first
+            let user = users.find(u => u.email === email && u.password === password);
+
+            // If not found in localStorage, check Excel structure
+            if (!user) {
+                user = excelUsers.find(u => u.email === email && u.password === password);
+            }
+
+            if (user) {
+                // Store current user
+                localStorage.setItem('bookella_current_user', JSON.stringify(user));
+                showNotification('تم تسجيل الدخول بنجاح!', 'success');
+
+                // Redirect to main page after 1 second
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } else {
+                showNotification('البريد الإلكتروني أو كلمة المرور غير صحيحة', 'error');
+            }
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Validate email on blur
+        function validateEmail(email) {
+            const emailError = document.getElementById('emailError');
+            const emailInput = document.getElementById('registerEmail');
+
+            if (!isValidEmail(email)) {
+                emailError.classList.remove('hidden');
+                emailInput.classList.add('border-red-500');
+                emailInput.classList.remove('border-blue-500');
+            } else {
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-red-500');
+                emailInput.classList.add('border-blue-500');
+            }
+        }
+
+        // Validate login email on blur
+        function validateLoginEmail(email) {
+            const emailError = document.getElementById('loginEmailError');
+            const emailInput = document.getElementById('loginEmail');
+
+            if (!isValidEmail(email)) {
+                emailError.classList.remove('hidden');
+                emailInput.classList.add('border-red-500');
+                emailInput.classList.remove('border-green-500');
+            } else {
+                emailError.classList.add('hidden');
+                emailInput.classList.remove('border-red-500');
+                emailInput.classList.add('border-green-500');
+            }
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility(passwordId, toggleId) {
+            const passwordInput = document.getElementById(passwordId);
+            const toggleButton = document.getElementById(toggleId);
+            const icon = toggleButton.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+                toggleButton.title = 'إخفاء كلمة المرور';
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+                toggleButton.title = 'إظهار كلمة المرور';
+            }
+        }
+
+        // Handle Register
+        function handleRegister(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('registerName').value;
+            const phone = document.getElementById('registerPhone').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            // Validate email format
+            if (!isValidEmail(email)) {
+                showNotification('يرجى إدخال بريد إلكتروني صحيح', 'error');
+                return;
+            }
+
+            // Get existing users from both localStorage and Excel structure
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const excelData = JSON.parse(localStorage.getItem('bookella_excel_data') || '{}');
+            const excelUsers = excelData.Users || [];
+
+            // Check if email already exists in both places
+            if (users.find(u => u.email === email) || excelUsers.find(u => u.email === email)) {
+                showNotification('البريد الإلكتروني مستخدم بالفعل', 'error');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                email: email,
+                password: password,
+                points: 0,
+                level: 'New',
+                joinDate: new Date().toISOString(),
+                totalOrders: 0,
+                totalSpent: 0
+            };
+
+            // Add to users array (localStorage)
+            users.push(newUser);
+            localStorage.setItem('bookellaUsers', JSON.stringify(users));
+
+            // Save to Excel structure
+            if (typeof saveUserToExcel === 'function') {
+                saveUserToExcel(newUser);
+            }
+
+            // Auto login after successful registration
+            const newUserForLogin = {
+                id: newUser.id,
+                name: newUser.name,
+                phone: newUser.phone,
+                email: newUser.email,
+                password: newUser.password,
+                points: newUser.points,
+                level: newUser.level,
+                joinDate: newUser.joinDate,
+                totalOrders: newUser.totalOrders,
+                totalSpent: newUser.totalSpent
+            };
+
+            // Store current user for auto login
+            localStorage.setItem('bookella_current_user', JSON.stringify(newUserForLogin));
+
+            showNotification('تم إنشاء الحساب وتسجيل الدخول تلقائياً! تم حفظ البيانات في ملف Excel', 'success');
+
+            // Redirect to main page after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        // Global variable for forgot password
+        let currentEmail = '';
+
+        // Verify user data for forgot password
+        function verifyUserData(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('forgotEmail').value;
+            const name = document.getElementById('forgotName').value;
+            const phone = document.getElementById('forgotPhone').value;
+
+            // Check if user exists with matching data
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const excelData = JSON.parse(localStorage.getItem('bookella_excel_data') || '{}');
+            const excelUsers = excelData.Users || [];
+
+            // Check in localStorage users
+            let user = users.find(u =>
+                u.email === email &&
+                u.name === name &&
+                u.phone === phone
+            );
+
+            // If not found in localStorage, check Excel structure
+            if (!user) {
+                user = excelUsers.find(u =>
+                    u.email === email &&
+                    u.name === name &&
+                    u.phone === phone
+                );
+            }
+
+            if (!user) {
+                showNotification('البيانات غير صحيحة أو غير مسجلة في النظام', 'error');
+                return;
+            }
+
+            currentEmail = email;
+            showNotification('تم التحقق من بياناتك بنجاح!', 'success');
+
+            // Show password step
+            document.getElementById('verificationStep').classList.add('hidden');
+            document.getElementById('passwordStep').classList.remove('hidden');
+        }
+
+        // Reset password
+        function resetPassword(event) {
+            event.preventDefault();
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showNotification('كلمة المرور غير متطابقة', 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showNotification('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
+            // Update password in localStorage
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const excelData = JSON.parse(localStorage.getItem('bookella_excel_data') || '{}');
+            const excelUsers = excelData.Users || [];
+
+            // Update in localStorage users
+            const userIndex = users.findIndex(u => u.email === currentEmail);
+            if (userIndex !== -1) {
+                users[userIndex].password = newPassword;
+                localStorage.setItem('bookellaUsers', JSON.stringify(users));
+            }
+
+            // Update in Excel structure
+            const excelUserIndex = excelUsers.findIndex(u => u.email === currentEmail);
+            if (excelUserIndex !== -1) {
+                excelUsers[excelUserIndex].password = newPassword;
+                excelData.Users = excelUsers;
+                localStorage.setItem('bookella_excel_data', JSON.stringify(excelData));
+            }
+
+            showNotification('تم تغيير كلمة المرور بنجاح!', 'success');
+
+            // Switch to login tab after 2 seconds
+            setTimeout(() => {
+                showTab('login');
+                // Clear form
+                document.getElementById('forgotEmail').value = '';
+                document.getElementById('forgotName').value = '';
+                document.getElementById('forgotPhone').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                currentEmail = '';
+            }, 2000);
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.remove('hidden');
+
+            // Set color based on type
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#ef4444';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#3b82f6';
+            }
+
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('bookella_current_user');
+            if (currentUser) {
+                // Redirect to main page if already logged in
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

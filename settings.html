@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚙️ إعدادات الحساب - Bookella</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                        <span class="text-white text-lg">⚙️</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800">إعدادات الحساب</h1>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex items-center space-x-6 space-x-reverse">
+                    <a href="index.html" class="text-gray-700 hover:text-green-600 font-medium">العودة للرئيسية</a>
+                    <div id="userInfo" class="flex items-center space-x-3 space-x-reverse">
+                        <span id="userName" class="text-green-600 font-semibold"></span>
+                        <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors" title="تسجيل الخروج">
+                            <i class="fas fa-sign-out-alt ml-2"></i>
+                            خروج
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-5xl mx-auto">
+            <!-- User Profile Section -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 mb-8 border border-gray-100">
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">معلومات الحساب</h2>
+                    <p class="text-gray-600">عرض وتعديل بيانات حسابك الشخصي</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">الاسم الكامل</label>
+                            <div class="relative">
+                                <i class="fas fa-user absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="profileName" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all bg-gray-50" readonly title="الاسم الكامل">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">البريد الإلكتروني</label>
+                            <div class="relative">
+                                <i class="fas fa-envelope absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="email" id="profileEmail" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all bg-gray-50" readonly title="البريد الإلكتروني">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">رقم الهاتف</label>
+                            <div class="relative">
+                                <i class="fas fa-phone absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="tel" id="profilePhone" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all bg-gray-50" readonly title="رقم الهاتف">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">تاريخ الانضمام</label>
+                            <div class="relative">
+                                <i class="fas fa-calendar absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="profileJoinDate" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all bg-gray-50" readonly title="تاريخ الانضمام">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">إجمالي الطلبات</label>
+                            <div class="relative">
+                                <i class="fas fa-shopping-cart absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="profileOrders" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all bg-gray-50" readonly title="إجمالي الطلبات">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">إجمالي المشتريات</label>
+                            <div class="relative">
+                                <i class="fas fa-money-bill-wave absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="profileSpent" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all bg-gray-50" readonly title="إجمالي المشتريات">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <button onclick="enableEditMode()" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-edit ml-2"></i>
+                        تعديل البيانات
+                    </button>
+                </div>
+            </div>
+
+            <!-- Edit Profile Section -->
+            <div id="editProfileSection" class="bg-white rounded-3xl shadow-2xl p-8 mb-8 border border-gray-100 hidden">
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-edit text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">تعديل البيانات الشخصية</h2>
+                    <p class="text-gray-600">تحديث معلومات حسابك الشخصية</p>
+                </div>
+                <form id="editProfileForm" class="space-y-6 max-w-2xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">الاسم الكامل</label>
+                            <div class="relative">
+                                <i class="fas fa-user absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="editName" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all" placeholder="أدخل الاسم الكامل" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-3">رقم الهاتف</label>
+                            <div class="relative">
+                                <i class="fas fa-phone absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="tel" id="editPhone" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all" placeholder="أدخل رقم الهاتف" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 justify-center">
+                        <button type="button" onclick="cancelEdit()" class="bg-gray-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-600 transition-all">
+                            <i class="fas fa-times ml-2"></i>
+                            إلغاء
+                        </button>
+                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-save ml-2"></i>
+                            حفظ التغييرات
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Change Password Section -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 mb-8 border border-gray-100">
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-key text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">تغيير كلمة المرور</h2>
+                    <p class="text-gray-600">تحديث كلمة المرور لحماية حسابك</p>
+                </div>
+                <form id="changePasswordForm" class="space-y-6 max-w-md mx-auto">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-3">كلمة المرور الحالية</label>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="password" id="currentPassword" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أدخل كلمة المرور الحالية" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-3">كلمة المرور الجديدة</label>
+                        <div class="relative">
+                            <i class="fas fa-key absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="password" id="newPassword" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أدخل كلمة المرور الجديدة" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-3">تأكيد كلمة المرور الجديدة</label>
+                        <div class="relative">
+                            <i class="fas fa-check-circle absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="password" id="confirmPassword" class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all" placeholder="أعد إدخال كلمة المرور الجديدة" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-xl font-bold hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-key ml-2"></i>
+                        تغيير كلمة المرور
+                    </button>
+                </form>
+            </div>
+
+            <!-- Account Actions Section -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+                <div class="text-center mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-exclamation-triangle text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">إجراءات الحساب</h2>
+                    <p class="text-gray-600">إجراءات مهمة تتعلق بحسابك</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex items-center justify-between p-6 bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl border-2 border-red-200 hover:border-red-300 transition-all">
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center ml-4">
+                                <i class="fas fa-trash text-red-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-red-800 mb-1">حذف الحساب</h3>
+                                <p class="text-red-600">هذا الإجراء نهائي ولا يمكن التراجع عنه</p>
+                            </div>
+                        </div>
+                        <button onclick="showDeleteAccountModal()" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl font-bold hover:from-red-600 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-trash ml-2"></i>
+                            حذف الحساب
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Account Modal -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">تأكيد حذف الحساب</h3>
+                <p class="text-gray-600 mb-6">لحماية حسابك، يرجى إدخال كلمة المرور لتأكيد حذف الحساب. هذا الإجراء نهائي ولا يمكن التراجع عنه.</p>
+
+                <form id="deleteAccountForm" class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">كلمة المرور</label>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="password" id="deletePassword" class="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100 transition-all" placeholder="أدخل كلمة المرور" required>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex gap-4 justify-center">
+                    <button onclick="closeDeleteModal()" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">
+                        إلغاء
+                    </button>
+                    <button onclick="confirmDeleteAccount()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                        <i class="fas fa-trash ml-2"></i>
+                        حذف الحساب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg hidden"></div>
+
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('bookella_current_user');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                loadUserProfile(user);
+                setupEventListeners();
+            } else {
+                // Redirect to login if not logged in
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Load user profile data
+        function loadUserProfile(user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('profileName').value = user.name;
+            document.getElementById('profileEmail').value = user.email;
+            document.getElementById('profilePhone').value = user.phone || 'غير محدد';
+            document.getElementById('profileJoinDate').value = new Date(user.joinDate).toLocaleDateString('ar-EG');
+            document.getElementById('profileOrders').value = user.totalOrders || 0;
+            document.getElementById('profileSpent').value = `${user.totalSpent || 0} جنيه`;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Change password form
+            const changePasswordForm = document.getElementById('changePasswordForm');
+            if (changePasswordForm) {
+                changePasswordForm.addEventListener('submit', handleChangePassword);
+            }
+
+            // Edit profile form
+            const editProfileForm = document.getElementById('editProfileForm');
+            if (editProfileForm) {
+                editProfileForm.addEventListener('submit', handleEditProfile);
+            }
+        }
+
+        // Enable edit mode
+        function enableEditMode() {
+            const currentUser = JSON.parse(localStorage.getItem('bookella_current_user'));
+            document.getElementById('editName').value = currentUser.name;
+            document.getElementById('editPhone').value = currentUser.phone || '';
+            document.getElementById('editProfileSection').classList.remove('hidden');
+            document.getElementById('editProfileSection').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Cancel edit mode
+        function cancelEdit() {
+            document.getElementById('editProfileSection').classList.add('hidden');
+        }
+
+        // Handle edit profile
+        function handleEditProfile(e) {
+            e.preventDefault();
+
+            const newName = document.getElementById('editName').value.trim();
+            const newPhone = document.getElementById('editPhone').value.trim();
+
+            // Validation
+            if (!newName) {
+                showNotification('يرجى إدخال الاسم الكامل', 'error');
+                return;
+            }
+
+            if (!newPhone) {
+                showNotification('يرجى إدخال رقم الهاتف', 'error');
+                return;
+            }
+
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('bookella_current_user'));
+
+            // Update user in users array
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const updatedUsers = users.map(user => {
+                if (user.email === currentUser.email) {
+                    return {...user,
+                        name: newName,
+                        phone: newPhone
+                    };
+                }
+                return user;
+            });
+
+            // Update localStorage
+            localStorage.setItem('bookellaUsers', JSON.stringify(updatedUsers));
+
+            // Update current user
+            const updatedUser = {...currentUser,
+                name: newName,
+                phone: newPhone
+            };
+            localStorage.setItem('bookella_current_user', JSON.stringify(updatedUser));
+
+            // Update display
+            loadUserProfile(updatedUser);
+
+            showNotification('تم تحديث البيانات بنجاح!', 'success');
+
+            // Hide edit section
+            cancelEdit();
+        }
+
+        // Handle change password
+        function handleChangePassword(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('bookella_current_user'));
+
+            // Check current password
+            if (currentPassword !== currentUser.password) {
+                showNotification('كلمة المرور الحالية غير صحيحة', 'error');
+                return;
+            }
+
+            // Check if new passwords match
+            if (newPassword !== confirmPassword) {
+                showNotification('كلمة المرور الجديدة غير متطابقة', 'error');
+                return;
+            }
+
+            // Check password length
+            if (newPassword.length < 6) {
+                showNotification('كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
+            // Update password in users array
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const updatedUsers = users.map(user => {
+                if (user.email === currentUser.email) {
+                    return {...user,
+                        password: newPassword
+                    };
+                }
+                return user;
+            });
+
+            // Update localStorage
+            localStorage.setItem('bookellaUsers', JSON.stringify(updatedUsers));
+
+            // Update current user
+            const updatedUser = {...currentUser,
+                password: newPassword
+            };
+            localStorage.setItem('bookella_current_user', JSON.stringify(updatedUser));
+
+            showNotification('تم تغيير كلمة المرور بنجاح!', 'success');
+
+            // Reset form
+            e.target.reset();
+        }
+
+        // Show delete account modal
+        function showDeleteAccountModal() {
+            const modal = document.getElementById('deleteAccountModal');
+            modal.style.display = 'block';
+        }
+
+        // Close delete account modal
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteAccountModal');
+            modal.style.display = 'none';
+            // Clear password field
+            document.getElementById('deletePassword').value = '';
+        }
+
+        // Confirm delete account with password
+        function confirmDeleteAccount() {
+            const password = document.getElementById('deletePassword').value;
+            const currentUser = JSON.parse(localStorage.getItem('bookella_current_user'));
+
+            // Check password
+            if (password !== currentUser.password) {
+                showNotification('كلمة المرور غير صحيحة', 'error');
+                return;
+            }
+
+            // Remove user from users array
+            const users = JSON.parse(localStorage.getItem('bookellaUsers') || '[]');
+            const filteredUsers = users.filter(user => user.email !== currentUser.email);
+            localStorage.setItem('bookellaUsers', JSON.stringify(filteredUsers));
+
+            // Remove current user
+            localStorage.removeItem('bookella_current_user');
+
+            // Clear form and close modal
+            document.getElementById('deletePassword').value = '';
+            closeDeleteModal();
+
+            showNotification('تم حذف الحساب بنجاح!', 'success');
+
+            // Redirect to login page after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        }
+
+        // Delete account (legacy function - kept for compatibility)
+        function deleteAccount() {
+            confirmDeleteAccount();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.remove('hidden');
+
+            // Set color based on type
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#ef4444';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#3b82f6';
+            }
+
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('bookella_current_user');
+            window.location.href = 'index.html';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('deleteAccountModal');
+            if (event.target === modal) {
+                closeDeleteModal();
+            }
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

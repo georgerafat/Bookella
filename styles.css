@@ -1,0 +1,297 @@
+/* Bookella Styles - أنماط Bookella */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+* {
+    font-family: 'Cairo', sans-serif;
+}
+
+
+/* Gradient Backgrounds */
+
+.gradient-bg {
+    background: linear-gradient(135deg, #6d8c6d 0%, #8fb28f 100%);
+}
+
+
+/* Card Animations */
+
+.book-card {
+    transition: all 0.3s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Search Focus */
+
+.search-focus:focus {
+    box-shadow: 0 0 0 3px rgba(109, 140, 109, 0.1);
+}
+
+
+/* Navigation Links */
+
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #6d8c6d;
+    border-radius: 1px;
+}
+
+
+/* Cart Badge */
+
+.cart-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+
+/* Hero Book */
+
+.hero-book {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* Sidebar Items */
+
+.sidebar-item {
+    transition: all 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(109, 140, 109, 0.1);
+    transform: translateX(-5px);
+}
+
+
+/* Status Colors */
+
+.status-active {
+    background-color: #10b981;
+}
+
+.status-pending {
+    background-color: #f59e0b;
+}
+
+.status-inactive {
+    background-color: #ef4444;
+}
+
+
+/* Fade In Animation */
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Modal Styles */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.close {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+
+/* Cart Items */
+
+.cart-item {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+
+/* Form Groups */
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6d8c6d;
+    box-shadow: 0 0 0 3px rgba(109, 140, 109, 0.1);
+}
+
+
+/* Required/Optional Labels */
+
+.required::after {
+    content: " *";
+    color: red;
+}
+
+.optional::after {
+    content: " (اختياري)";
+    color: #666;
+    font-size: 12px;
+}
+
+
+/* Dark Mode Styles */
+
+.dark {
+    color-scheme: dark;
+}
+
+.dark body {
+    background-color: #1f2937;
+    color: #f9fafb;
+}
+
+.dark .bg-white {
+    background-color: #374151;
+}
+
+.dark .text-gray-800 {
+    color: #f9fafb;
+}
+
+.dark .text-gray-600 {
+    color: #d1d5db;
+}
+
+.dark .border-gray-200 {
+    border-color: #4b5563;
+}
+
+.dark .bg-gray-50 {
+    background-color: #374151;
+}
+
+.dark .bg-gray-100 {
+    background-color: #4b5563;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .book-card:hover {
+        transform: none;
+    }
+    .card-hover:hover {
+        transform: none;
+    }
+}
+
+
+/* Print Styles */
+
+@media print {
+    .modal,
+    .cart-badge,
+    button {
+        display: none !important;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}

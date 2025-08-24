@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪷📚 Bookella 📚🪷 - متجر الكتب الإلكتروني</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3e%3crect width='180' height='180' fill='%2310b981'/%3e%3ctext x='90' y='110' text-anchor='middle' font-size='60'%3e🪷📚%3c/text%3e%3c/svg%3e">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                        <span class="text-white text-lg">🪷📚</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800">Bookella</h1>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <div class="flex">
+                            <select class="border border-gray-300 rounded-r-lg px-3 py-2 bg-gray-50 text-gray-700 focus:outline-none focus:border-green-500" title="اختر الفئة">
+                                <option value="">جميع الفئات</option>
+                                <option value="arabic">كتب عربية</option>
+                                <option value="english">كتب إنجليزية</option>
+                                <option value="rental">خدمات استعارة</option>
+                                <option value="self-help">تطوير الذات</option>
+                                <option value="technology">تكنولوجيا</option>
+                            </select>
+                            <input type="text" id="searchInput" placeholder="ابحث عن كتاب، مؤلف، أو فئة..." class="flex-1 px-4 py-2 border border-gray-300 focus:outline-none search-focus">
+                            <button class="px-4 py-2 bg-green-600 text-white rounded-l-lg hover:bg-green-700 transition-colors" title="بحث">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden lg:flex flex-col items-center space-y-4">
+                    <!-- Main Navigation Links -->
+                    <div class="flex items-center space-x-8 space-x-reverse">
+                        <a href="#" class="nav-link text-gray-700 hover:text-green-600 font-medium">الرئيسية</a>
+                        <a href="#services" class="nav-link text-gray-700 hover:text-green-600 font-medium">الخدمات</a>
+                        <a href="#about" class="nav-link text-gray-700 hover:text-green-600 font-medium">من نحن</a>
+                        <a href="#contact" class="nav-link text-gray-700 hover:text-green-600 font-medium">تواصل معنا</a>
+                        <a href="bookella_loyalty_system.html" class="nav-link text-gray-700 hover:text-green-600 font-medium">نظام النقاط</a>
+                    </div>
+
+                    <!-- User Actions Row -->
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div id="userSection" class="hidden flex items-center space-x-3 space-x-reverse">
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <span id="userName" class="text-green-600 font-bold text-sm"></span>
+                                <span id="userPoints" class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold"></span>
+                            </div>
+                            <a href="settings.html" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white w-10 h-10 rounded-full hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg flex items-center justify-center" title="الملف الشخصي">
+                                <i class="fas fa-user text-lg"></i>
+                            </a>
+                            <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-sm font-bold shadow-lg" title="تسجيل الخروج">
+                                 <i class="fas fa-sign-out-alt ml-1"></i>
+                                 خروج
+                             </button>
+                        </div>
+
+                        <div id="adminSection" class="hidden">
+                            <a href="admin_panel.html" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all font-bold shadow-lg" title="لوحة الأدمن">
+                                <i class="fas fa-crown ml-2"></i> لوحة الأدمن
+                            </a>
+                        </div>
+
+                        <div id="loginSection">
+                            <a href="login.html" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-bold shadow-lg text-lg">
+                                <i class="fas fa-sign-in-alt ml-2"></i> تسجيل الدخول
+                            </a>
+                        </div>
+
+                        <button onclick="openCart()" class="relative bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-bold shadow-lg" title="فتح سلة التسوق">
+                        <i class="fas fa-shopping-cart ml-2"></i>
+                        السلة
+                             <span id="cartBadge" class="cart-badge absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">0</span>
+                    </button>
+                    </div>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden text-gray-700" onclick="toggleMobileMenu()" title="القائمة">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Search -->
+            <div class="md:hidden pb-4">
+                <div class="relative">
+                    <input type="text" placeholder="ابحث عن كتاب..." class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none search-focus">
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" title="بحث">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="lg:hidden hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-4 space-y-3">
+                <a href="#" class="block text-gray-700 hover:text-green-600 font-medium">الرئيسية</a>
+                <a href="#services" class="block text-gray-700 hover:text-green-600 font-medium">الخدمات</a>
+                <a href="#about" class="block text-gray-700 hover:text-green-600 font-medium">من نحن</a>
+                <a href="#contact" class="block text-gray-700 hover:text-green-600 font-medium">تواصل معنا</a>
+                <a href="bookella_loyalty_system.html" class="block text-gray-700 hover:text-green-600 font-medium">نظام النقاط</a>
+                <div id="mobileUserSection" class="hidden space-y-3">
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-2xl border border-green-200">
+                        <div class="flex items-center justify-between mb-3">
+                            <span id="mobileUserName" class="text-green-600 font-bold text-sm"></span>
+                            <span id="mobileUserPoints" class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold"></span>
+                        </div>
+                        <a href="settings.html" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all text-sm text-center block mb-3 font-bold shadow-lg" title="الملف الشخصي">
+                            <i class="fas fa-user ml-1"></i> الملف الشخصي
+                        </a>
+                        <button onclick="logout()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-sm font-bold shadow-lg" title="تسجيل الخروج">
+                            <i class="fas fa-sign-out-alt ml-1"></i>
+                            تسجيل الخروج
+                        </button>
+                    </div>
+                </div>
+                <div id="mobileAdminSection" class="hidden">
+                    <a href="admin_panel.html" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-3 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all text-center block font-bold shadow-lg" title="لوحة الأدمن">
+                        <i class="fas fa-crown ml-2"></i> لوحة الأدمن
+                    </a>
+                </div>
+                <div id="mobileLoginSection">
+                    <a href="login.html" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all text-center block font-bold shadow-lg">
+                        <i class="fas fa-sign-in-alt ml-2"></i> تسجيل الدخول
+                    </a>
+                </div>
+                <button onclick="openCart()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-bold shadow-lg" title="فتح سلة التسوق">
+                    <i class="fas fa-shopping-cart ml-2"></i>
+                    السلة (<span id="mobileCartBadge">0</span>)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg py-16 lg:py-24">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 text-white mb-8 lg:mb-0">
+                    <h2 class="text-4xl lg:text-6xl font-bold mb-6">🪷📚 Bookella 📚🪷</h2>
+                    <p class="text-xl mb-8 opacity-90">متجرك الموثوق لأفضل الكتب في جميع المجالات. نوفر لك تجربة قراءة استثنائية.</p>
+                    <button onclick="scrollToServices()" class="bg-white text-green-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg">
+                        تسوق الآن
+                        <i class="fas fa-arrow-left mr-2"></i>
+                    </button>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="hero-book bg-white p-6 rounded-2xl shadow-2xl max-w-sm">
+                        <div class="w-full h-64 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg mb-4 flex items-center justify-center">
+                            <i class="fas fa-book text-white text-6xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">كتاب الشهر</h3>
+                        <p class="text-gray-600 mb-2">أسرار النجاح في الحياة</p>
+                        <p class="text-green-600 font-bold text-lg">200 جنيه</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">احنا مين؟</h2>
+            <div class="max-w-4xl mx-auto text-center space-y-4">
+                <p class="text-lg text-gray-700">احنا جروب للقراءة بنوفر كل الروايات و الكتب بسعر أقل من العادي - استعارة و بيع</p>
+                <p class="text-lg text-gray-700">في جروبنا بنتيح لك فرصة شراء كتب بأرخص الأسعار و استعارة كتب كله حسب الرغبة 🤗</p>
+                <p class="text-lg text-gray-700">📚 خدمة استعارة الكتب – وفر فلوسك واستمتع بالقراءة! 📚</p>
+                <p class="text-lg text-gray-700">بتحب تقرأ بس مش عايز تدفع ثمن كل كتاب؟ 🤔</p>
+                <p class="text-lg text-gray-700">بنقدم لك خدمة استعارة الكتب بأسعار مميزة ومناسبة للجميع! 💰✨</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">نظام الاستعارة</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-4">📚</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">في الدراسة</h3>
+                    <p class="text-gray-600 mb-4">أسبوعين بـ 15 جنيه</p>
+                    <div class="text-2xl font-bold text-green-600 mb-4">15 جنيه</div>
+                    <button onclick="addToCart('استعارة - في الدراسة', 15, 'rental')" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                        اطلب الآن
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-4">🏖️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">في الإجازة</h3>
+                    <p class="text-gray-600 mb-4">7-10 ايام بـ 15 جنيه</p>
+                    <div class="text-2xl font-bold text-green-600 mb-4">15 جنيه</div>
+                    <button onclick="addToCart('استعارة - في الإجازة', 15, 'rental')" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                        اطلب الآن
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                    <div class="text-4xl mb-4">🔖</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">الكتب الكبيرة</h3>
+                    <p class="text-gray-600 mb-4">أسبوعين يبدأ من 20 جنيه</p>
+                    <p class="text-sm text-gray-500 mb-4">(مثل "كافكا" أو "اتعفن رعبًا")</p>
+                    <div class="text-2xl font-bold text-green-600 mb-4">تبدأ من 20 جنيه</div>
+                    <button onclick="addToCart('استعارة - كتب كبيرة', 20, 'rental')" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                        اطلب الآن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Sections -->
+    <main class="container mx-auto px-4 py-16">
+        <!-- Best Sellers -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">الأكثر مبيعًا</h2>
+                <a href="#" class="text-green-600 hover:text-green-700 font-medium">عرض الكل</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-red-400 to-pink-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">فن إدارة الوقت</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. أحمد محمد</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">150 جنيه</span>
+                            <button onclick="addToCart('فن إدارة الوقت - د. أحمد محمد', 75, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف فن إدارة الوقت للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">تطوير الذات</h3>
+                        <p class="text-gray-600 text-sm mb-2">سارة أحمد</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">180 جنيه</span>
+                            <button onclick="addToCart('تطوير الذات - سارة أحمد', 85, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف تطوير الذات للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">البرمجة للمبتدئين</h3>
+                        <p class="text-gray-600 text-sm mb-2">محمد علي</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">240 جنيه</span>
+                            <button onclick="addToCart('البرمجة للمبتدئين - محمد علي', 120, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف البرمجة للمبتدئين للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">علم النفس</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. فاطمة حسن</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">190 جنيه</span>
+                            <button onclick="addToCart('علم النفس - د. فاطمة حسن', 95, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف علم النفس للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Releases -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">أحدث الإصدارات</h2>
+                <a href="#" class="text-green-600 hover:text-green-700 font-medium">عرض الكل</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">الذكاء الاصطناعي</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. خالد السعيد</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">300 جنيه</span>
+                            <button onclick="addToCart('الذكاء الاصطناعي - د. خالد السعيد', 150, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف الذكاء الاصطناعي للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-rose-400 to-red-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">فن الطبخ العربي</h3>
+                        <p class="text-gray-600 text-sm mb-2">أم كلثوم</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">130 جنيه</span>
+                            <button onclick="addToCart('فن الطبخ العربي - أم كلثوم', 65, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف فن الطبخ العربي للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">التاريخ الإسلامي</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. عبدالله النور</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">220 جنيه</span>
+                            <button onclick="addToCart('التاريخ الإسلامي - د. عبدالله النور', 110, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف التاريخ الإسلامي للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">الاستثمار الذكي</h3>
+                        <p class="text-gray-600 text-sm mb-2">أحمد الراشد</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">260 جنيه</span>
+                            <button onclick="addToCart('الاستثمار الذكي - أحمد الراشد', 130, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف الاستثمار الذكي للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Books -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">الكتب المميزة</h2>
+                <a href="#" class="text-green-600 hover:text-green-700 font-medium">عرض الكل</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">أدب الرحلات</h3>
+                        <p class="text-gray-600 text-sm mb-2">ابن بطوطة</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">160 جنيه</span>
+                            <button onclick="addToCart('أدب الرحلات - ابن بطوطة', 80, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف أدب الرحلات للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">الشعر العربي</h3>
+                        <p class="text-gray-600 text-sm mb-2">المتنبي</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">140 جنيه</span>
+                            <button onclick="addToCart('الشعر العربي - المتنبي', 70, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف الشعر العربي للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">علوم الفضاء</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. نيل تايسون</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">280 جنيه</span>
+                            <button onclick="addToCart('علوم الفضاء - د. نيل تايسون', 140, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف علوم الفضاء للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-48 bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">الرواية العربية</h3>
+                        <p class="text-gray-600 text-sm mb-2">نجيب محفوظ</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">180 جنيه</span>
+                            <button onclick="addToCart('الرواية العربية - نجيب محفوظ', 90, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف الرواية العربية للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Books Section -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">🆕 الكتب الجديدة</h2>
+                <a href="#" class="text-green-600 hover:text-green-700 font-medium">عرض الكل</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden relative">
+                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">جديد</div>
+                    <div class="h-48 bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">تعلم الذكاء الاصطناعي</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. سارة محمود</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">320 جنيه</span>
+                            <button onclick="addToCart('تعلم الذكاء الاصطناعي - د. سارة محمود', 160, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف تعلم الذكاء الاصطناعي للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden relative">
+                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">جديد</div>
+                    <div class="h-48 bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">فن القيادة</h3>
+                        <p class="text-gray-600 text-sm mb-2">أحمد السيد</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">280 جنيه</span>
+                            <button onclick="addToCart('فن القيادة - أحمد السيد', 140, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف فن القيادة للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden relative">
+                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">جديد</div>
+                    <div class="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">علم البيانات</h3>
+                        <p class="text-gray-600 text-sm mb-2">د. محمد أحمد</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">350 جنيه</span>
+                            <button onclick="addToCart('علم البيانات - د. محمد أحمد', 175, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف علم البيانات للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card bg-white rounded-xl shadow-md overflow-hidden relative">
+                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">جديد</div>
+                    <div class="h-48 bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+                        <i class="fas fa-book text-white text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-2">تطوير تطبيقات الويب</h3>
+                        <p class="text-gray-600 text-sm mb-2">فاطمة علي</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 font-bold">400 جنيه</span>
+                            <button onclick="addToCart('تطوير تطبيقات الويب - فاطمة علي', 200, 'book')" class="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors" title="أضف تطوير تطبيقات الويب للسلة">
+                                أضف للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">تواصل معنا</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">معلومات التواصل</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-green-600 ml-3"></i>
+                            <span>+201508168771</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-green-600 ml-3"></i>
+                            <span>info@bookella.com</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-green-600 ml-3"></i>
+                            <span>مصر</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">أرسل رسالة</h3>
+                    <form class="space-y-4">
+                        <div class="form-group">
+                            <label for="contactName" class="required">الاسم</label>
+                            <input type="text" id="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail" class="required">البريد الإلكتروني</label>
+                            <input type="email" id="contactEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage" class="required">الرسالة</label>
+                            <textarea id="contactMessage" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            إرسال الرسالة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">⭐ آراء العملاء ⭐</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg ml-3">أ</div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">أحمد محمد</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"خدمة ممتازة! الكتب وصلت بسرعة والجودة عالية. أنصح الجميع بالتجربة"</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg ml-3">س</div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">سارة أحمد</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"أسعار مناسبة جداً وخدمة استعارة رائعة. وفرت علي كتير من المال"</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg ml-3">م</div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">محمد علي</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"أفضل متجر كتب في مصر! التنوع كبير والأسعار معقولة"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-3 space-x-reverse mb-4">
+                        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                            <span>🪷📚</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Bookella</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">متجرك الموثوق لأفضل الكتب في جميع المجالات. نوفر لك تجربة قراءة استثنائية.</p>
+                    <div class="flex space-x-4 space-x-reverse">
+                        <a href="https://www.facebook.com/share/16PUzKGEvE/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors" title="Facebook">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/IlgC3wN1A737YQA6225Ko9" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors" title="WhatsApp Group">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                        <a href="https://whatsapp.com/channel/0029Vb3JASJ7z4klIZ1fNu3F" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors" title="WhatsApp Channel">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/IlgC3wN1A737YQA6225Ko9" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors" title="تواصل معنا">
+                            <i class="fas fa-phone text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">من نحن</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">سياسة الخصوصية</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">شروط الاستخدام</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">الأسئلة الشائعة</a></li>
+                    </ul>
+                </div>
+
+                <!-- Categories -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">الفئات</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">الأدب والشعر</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">العلوم والتكنولوجيا</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">التاريخ والجغرافيا</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">تطوير الذات</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">النشرة البريدية</h4>
+                    <p class="text-gray-300 mb-4">اشترك للحصول على أحدث العروض والكتب الجديدة</p>
+                    <div class="flex">
+                        <input type="email" placeholder="بريدك الإلكتروني" class="flex-1 px-4 py-2 rounded-r-lg border-0 focus:outline-none text-gray-800">
+                        <button class="bg-green-600 px-4 py-2 rounded-l-lg hover:bg-green-700 transition-colors" title="اشتراك">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2024 Bookella. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">سلة التسوق</h2>
+
+            <div id="cartItems" class="mb-6">
+                <!-- Cart items will be displayed here -->
+            </div>
+
+            <div class="border-t pt-4 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-bold">المجموع:</span>
+                    <span id="cartTotal" class="text-2xl font-bold text-green-600">0 جنيه</span>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="clearCart()" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-colors" title="إفراغ سلة التسوق">
+                        إفراغ السلة
+                    </button>
+                    <button onclick="openCheckout()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex-1" title="إتمام الطلب">
+                        إتمام الطلب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCheckout()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">إتمام الطلب</h2>
+
+            <form id="checkoutForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="customerName" class="required">الاسم الكامل</label>
+                        <input type="text" id="customerName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhone" class="required">رقم الهاتف</label>
+                        <input type="tel" id="customerPhone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhoneAlt" class="required">رقم هاتف بديل</label>
+                        <input type="tel" id="customerPhoneAlt" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookCount" class="required">عدد الكتب</label>
+                        <input type="number" id="bookCount" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bookNames" class="required">أسماء الكتب</label>
+                    <textarea id="bookNames" rows="3" readonly></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerAddress" class="required">العنوان بالتفصيل</label>
+                    <textarea id="customerAddress" rows="3" required></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="totalPrice" class="required">إجمالي السعر</label>
+                        <input type="text" id="totalPrice" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discountCode" class="optional">كوبون الخصم (إن وجد)</label>
+                        <input type="text" id="discountCode" placeholder="اختياري">
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="closeCheckout()" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors" title="إلغاء الطلب">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex-1" title="تأكيد الطلب">
+                        تأكيد الطلب
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="dark-mode.js"></script>
+    <script src="search-enhancements.js"></script>
+    <script src="admin-enhancements.js"></script>
+    <script src="advanced-loyalty.js"></script>
+    <script src="reviews-system.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>
