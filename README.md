@@ -141,9 +141,7 @@
 - **القناة**: [قناة الواتساب](https://whatsapp.com/channel/0029Vb3JASJ7z4klIZ1fNu3F)
 - **الفيسبوك**: [صفحة الفيسبوك](https://www.facebook.com/share/16PUzKGEvE/)
 
-### حساب الأدمن:
-- **البريد الإلكتروني**: georgerafat255@gmail.com
-- **كلمة المرور**: Georgerafat@30903302601911
+
 
 ---
 
