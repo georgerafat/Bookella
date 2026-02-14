@@ -262,6 +262,7 @@ function logout() {
 document.addEventListener('DOMContentLoaded', function() {
     loadCartFromStorage();
     updateCartDisplay();
+    initializeReadingTracker();
 
     // إضافة مستمع لحدث البحث
     const searchInput = document.getElementById('searchInput');
@@ -285,6 +286,105 @@ document.addEventListener('DOMContentLoaded', function() {
         checkoutForm.addEventListener('submit', handleCheckoutForm);
     }
 });
+
+function initializeReadingTracker() {
+    const trackerForm = document.getElementById('readingTrackerForm');
+    if (!trackerForm) {
+        return;
+    }
+
+    const savedTracker = JSON.parse(localStorage.getItem('bookella_reading_tracker') || '{}');
+    hydrateTrackerForm(savedTracker);
+    updateTrackerDashboard(savedTracker);
+
+    trackerForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const trackerData = {
+            bookName: document.getElementById('trackerBookName').value.trim(),
+            currentPage: parseInt(document.getElementById('trackerCurrentPage').value, 10) || 0,
+            totalPages: parseInt(document.getElementById('trackerTotalPages').value, 10) || 0,
+            booksRead: parseInt(document.getElementById('trackerBooksRead').value, 10) || 0,
+            yearGoal: parseInt(document.getElementById('trackerYearGoal').value, 10) || 12,
+            updatedAt: new Date().toISOString()
+        };
+
+        if (trackerData.totalPages > 0 && trackerData.currentPage > trackerData.totalPages) {
+            showNotification('الصفحة الحالية لا يمكن أن تتجاوز إجمالي الصفحات', 'warning');
+            return;
+        }
+
+        localStorage.setItem('bookella_reading_tracker', JSON.stringify(trackerData));
+        updateTrackerDashboard(trackerData);
+        showNotification('تم حفظ تقدم القراءة بنجاح', 'success');
+    });
+}
+
+function hydrateTrackerForm(trackerData) {
+    const bookNameInput = document.getElementById('trackerBookName');
+    const currentPageInput = document.getElementById('trackerCurrentPage');
+    const totalPagesInput = document.getElementById('trackerTotalPages');
+    const booksReadInput = document.getElementById('trackerBooksRead');
+    const yearGoalInput = document.getElementById('trackerYearGoal');
+
+    if (bookNameInput) bookNameInput.value = trackerData.bookName || '';
+    if (currentPageInput) currentPageInput.value = trackerData.currentPage || '';
+    if (totalPagesInput) totalPagesInput.value = trackerData.totalPages || '';
+    if (booksReadInput) booksReadInput.value = trackerData.booksRead || '';
+    if (yearGoalInput) yearGoalInput.value = trackerData.yearGoal || 12;
+}
+
+function updateTrackerDashboard(trackerData) {
+    const safeTotalPages = Math.max(trackerData.totalPages || 0, 0);
+    const safeCurrentPage = Math.min(Math.max(trackerData.currentPage || 0, 0), safeTotalPages || 0);
+    const bookProgress = safeTotalPages > 0 ? Math.round((safeCurrentPage / safeTotalPages) * 100) : 0;
+
+    const safeYearGoal = Math.max(trackerData.yearGoal || 12, 1);
+    const safeBooksRead = Math.max(trackerData.booksRead || 0, 0);
+    const yearProgress = Math.min(Math.round((safeBooksRead / safeYearGoal) * 100), 100);
+
+    setText('currentBookLabel', trackerData.bookName || 'لا يوجد كتاب محدد');
+    setText('bookProgressText', `${bookProgress}% مكتمل • ${safeCurrentPage} / ${safeTotalPages || 0} صفحة`);
+    setWidth('bookProgressBar', bookProgress);
+
+    setText('yearGoalLabel', `${safeBooksRead} / ${safeYearGoal} كتاب`);
+    setText('yearGoalProgressText', yearProgress >= 100 ? 'رائع! لقد حققت التحدي السنوي 🎉' : `متبقي ${Math.max(safeYearGoal - safeBooksRead, 0)} كتاب للوصول لهدفك`);
+    setWidth('yearGoalProgressBar', yearProgress);
+
+    setText('remainingPagesValue', `${Math.max(safeTotalPages - safeCurrentPage, 0)}`);
+    setText('remainingBooksValue', `${Math.max(safeYearGoal - safeBooksRead, 0)}`);
+    setText('readingMotivation', getMotivationText(bookProgress, yearProgress));
+}
+
+function setText(elementId, text) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.textContent = text;
+    }
+}
+
+function setWidth(elementId, width) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.style.width = `${Math.max(0, Math.min(width, 100))}%`;
+    }
+}
+
+function getMotivationText(bookProgress, yearProgress) {
+    if (yearProgress >= 100) {
+        return 'بطل التحدي 🏆';
+    }
+
+    if (bookProgress >= 75) {
+        return 'نهاية قريبة! ✨';
+    }
+
+    if (bookProgress >= 30 || yearProgress >= 30) {
+        return 'تقدم ممتاز 👏';
+    }
+
+    return 'ابدأ الآن 🚀';
+}
 
 // إضافة منتج إلى السلة
 function addToCart(name, price, type) {
