@@ -2,6 +2,9 @@
 let cart = [];
 let cartTotal = 0;
 
+const OWNER_EMAIL_ONLY = 'georgerafat255@gmail.com';
+const WHATSAPP_ORDER_NUMBER = '201508168771';
+
 // Excel Data Management Functions
 function saveUserToExcel(user) {
     // Get existing Excel data or create new structure
@@ -58,7 +61,7 @@ function saveOrderToExcel(order) {
         totalPrice: order.totalPrice,
         discountCode: order.discountCode || '',
         orderDate: order.orderDate,
-        status: 'pending'
+        status: order.status || 'Pending Confirmation'
     };
 
     excelData.Orders.push(orderRecord);
@@ -197,7 +200,7 @@ function showUserInfo(user) {
         userPoints.textContent = `${user.points} نقطة`;
 
         // Check if user is admin
-        if (user.email === 'georgerafat255@gmail.com') {
+        if (user.email === OWNER_EMAIL_ONLY) {
             if (adminSection) {
                 adminSection.classList.remove('hidden');
             }
@@ -218,7 +221,7 @@ function showUserInfo(user) {
         mobileUserPoints.textContent = `${user.points} نقطة`;
 
         // Check if user is admin
-        if (user.email === 'georgerafat255@gmail.com') {
+        if (user.email === OWNER_EMAIL_ONLY) {
             if (mobileAdminSection) {
                 mobileAdminSection.classList.remove('hidden');
             }
@@ -263,6 +266,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCartFromStorage();
     updateCartDisplay();
     initializeReadingTracker();
+    initializeBookSalesSignals();
+    initializeOrderTrackingPage();
 
     // إضافة مستمع لحدث البحث
     const searchInput = document.getElementById('searchInput');
@@ -579,42 +584,82 @@ function fillCheckoutForm() {
 function handleCheckoutForm(e) {
     e.preventDefault();
 
-    // جمع البيانات
+    const customerName = document.getElementById('customerName').value.trim();
+    const customerPhone = document.getElementById('customerPhone').value.trim();
+    const governorate = document.getElementById('governorate').value.trim();
+    const city = document.getElementById('city').value.trim();
+
+    if (!isValidTripleName(customerName)) {
+        showNotification('يرجى إدخال الاسم ثلاثي (3 كلمات على الأقل)', 'warning');
+        return;
+    }
+
+    if (!isValidEgyptPhone(customerPhone)) {
+        showNotification('يرجى إدخال رقم موبايل مصري صحيح', 'warning');
+        return;
+    }
+
     const formData = {
         id: Date.now(),
-        customerName: document.getElementById('customerName').value,
-        customerPhone: document.getElementById('customerPhone').value,
-        customerPhoneAlt: document.getElementById('customerPhoneAlt').value,
+        orderId: generateOrderId(),
+        status: 'Pending Confirmation',
+        customerName,
+        customerPhone,
+        customerPhoneAlt: document.getElementById('customerPhoneAlt').value.trim(),
+        governorate,
+        city,
+        nearestPost: document.getElementById('nearestPost').value.trim(),
+        customerAddress: document.getElementById('customerAddress').value.trim(),
         bookCount: document.getElementById('bookCount').value,
         bookNames: document.getElementById('bookNames').value,
-        customerAddress: document.getElementById('customerAddress').value,
         totalPrice: document.getElementById('totalPrice').value,
         discountCode: document.getElementById('discountCode').value,
         cartItems: cart,
         orderDate: new Date().toISOString(),
-        orderId: generateOrderId()
+        statusHistory: [{ status: 'Pending Confirmation', at: new Date().toISOString(), note: 'تم إنشاء الطلب' }]
     };
 
-    // حفظ الطلب في localStorage
     saveOrder(formData);
-
-    // حفظ العميل كـ user جديد
     saveCustomerAsUser(formData);
-
-    // حفظ الطلب في Excel structure
     saveOrderToExcel(formData);
+    saveAuditLog('order_created', { orderId: formData.orderId, totalPrice: formData.totalPrice });
 
-    // رسالة نجاح
-    showNotification('تم إرسال طلبك بنجاح! تم حفظ البيانات في ملف Excel', 'success');
+    showWhatsAppCTA(formData);
+    showNotification(`تم إنشاء الطلب ${formData.orderId} بنجاح`, 'success');
 
-    // إفراغ السلة
     clearCart();
-
-    // إغلاق النافذة
     closeCheckout();
-
-    // إعادة تعيين النموذج
     e.target.reset();
+}
+
+function showWhatsAppCTA(orderData) {
+    const cta = document.getElementById('whatsAppCTA');
+    if (!cta) {
+        return;
+    }
+
+    const waMessage = buildWhatsAppMessage(orderData);
+    const waUrl = `https://wa.me/${WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(waMessage)}`;
+    cta.classList.remove('hidden');
+    cta.innerHTML = `
+        <p class="font-bold mb-2">تم تجهيز رسالة التأكيد على واتساب ✅</p>
+        <p class="mb-3">رقم الطلب: <span class="font-mono">${orderData.orderId}</span></p>
+        <a href="${waUrl}" target="_blank" rel="noopener" class="inline-flex items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            <i class="fab fa-whatsapp ml-2"></i>
+            تأكيد الطلب على واتساب
+        </a>
+    `;
+}
+
+function buildWhatsAppMessage(orderData) {
+    const itemsText = orderData.cartItems.map(item => `- ${item.name} × ${item.quantity}`).join('\n');
+    return `طلب جديد من Bookella
+رقم الطلب: ${orderData.orderId}
+الاسم: ${orderData.customerName}
+الموبايل: ${orderData.customerPhone}
+العنوان: ${orderData.governorate} - ${orderData.city} - ${orderData.customerAddress}
+الكتب:
+${itemsText}`;
 }
 
 // معالجة نموذج التواصل
@@ -666,6 +711,10 @@ function saveOrder(orderData) {
     const orders = JSON.parse(localStorage.getItem('bookellaOrders') || '[]');
     orders.push(orderData);
     localStorage.setItem('bookellaOrders', JSON.stringify(orders));
+
+    const ordersV2 = JSON.parse(localStorage.getItem('bookella_orders_v2') || '[]');
+    ordersV2.push(orderData);
+    localStorage.setItem('bookella_orders_v2', JSON.stringify(ordersV2));
 }
 
 // حفظ رسالة التواصل
@@ -679,6 +728,14 @@ function saveContactMessage(messageData) {
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+}
+
+function isValidTripleName(name) {
+    return name.split(/\s+/).filter(Boolean).length >= 3;
+}
+
+function isValidEgyptPhone(phone) {
+    return /^01[0-2,5]{1}\d{8}$/.test(phone);
 }
 
 // حفظ العميل كـ user جديد
@@ -833,6 +890,91 @@ function scrollToServices() {
     if (servicesSection) {
         servicesSection.scrollIntoView({ behavior: 'smooth' });
     }
+}
+
+
+
+function initializeOrderTrackingPage() {
+    const trackOrderForm = document.getElementById('trackOrderForm');
+    if (!trackOrderForm) {
+        return;
+    }
+
+    trackOrderForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const orderId = document.getElementById('trackingOrderId').value.trim();
+        const phone = document.getElementById('trackingPhone').value.trim();
+        const orders = JSON.parse(localStorage.getItem('bookella_orders_v2') || '[]');
+        const order = orders.find(item => item.orderId === orderId && item.customerPhone === phone);
+        renderTrackingResult(order);
+    });
+}
+
+function renderTrackingResult(order) {
+    const container = document.getElementById('trackingResult');
+    if (!container) {
+        return;
+    }
+
+    container.classList.remove('hidden');
+    if (!order) {
+        container.innerHTML = '<p class="text-red-600 font-semibold">لم يتم العثور على طلب بهذه البيانات.</p>';
+        return;
+    }
+
+    const history = (order.statusHistory || [{ status: order.status || 'Pending Confirmation', at: order.orderDate }]).map(step => `
+        <li class="mb-2"><span class="font-semibold">${step.status}</span> - ${new Date(step.at).toLocaleString('ar-EG')}</li>
+    `).join('');
+
+    container.innerHTML = `
+        <h3 class="text-lg font-bold mb-3">الطلب ${order.orderId}</h3>
+        <p class="mb-2">الحالة الحالية: <span class="font-semibold text-green-700">${order.status}</span></p>
+        <p class="mb-2">إجمالي الطلب: <span class="font-semibold">${order.totalPrice}</span></p>
+        <p class="mb-3">الكتب: ${order.bookNames.replace(/\n/g, ' | ')}</p>
+        <h4 class="font-bold mb-2">سجل الحالة</h4>
+        <ul class="list-disc pr-5 text-sm text-gray-700">${history}</ul>
+    `;
+}
+
+function initializeBookSalesSignals() {
+    const cards = document.querySelectorAll('.book-card');
+    if (!cards.length) {
+        return;
+    }
+
+    const popularity = JSON.parse(localStorage.getItem('bookella_popularity') || '{}');
+    cards.forEach((card, index) => {
+        const title = card.querySelector('h3')?.textContent?.trim() || `book-${index}`;
+        const totalOrders = popularity[title] || Math.floor(Math.random() * 120) + 5;
+        const stock = Math.max(2, 30 - Math.floor(totalOrders / 5));
+        popularity[title] = totalOrders;
+
+        const signal = document.createElement('div');
+        signal.className = 'mt-2 flex items-center justify-between text-xs';
+        signal.innerHTML = `
+            <span class="text-orange-600 font-bold">${stock <= 8 ? `متبقي ${stock} فقط` : `المخزون: ${stock}`}</span>
+            <span class="text-blue-600">طلبه ${totalOrders}+ شخص</span>
+        `;
+
+        const content = card.querySelector('.p-4');
+        if (content && !content.querySelector('.text-orange-600')) {
+            content.appendChild(signal);
+        }
+    });
+    localStorage.setItem('bookella_popularity', JSON.stringify(popularity));
+}
+
+function saveAuditLog(action, payload) {
+    const logs = JSON.parse(localStorage.getItem('bookella_audit_logs') || '[]');
+    logs.unshift({
+        id: Date.now(),
+        action,
+        payload,
+        user: JSON.parse(localStorage.getItem('bookella_current_user') || 'null')?.email || 'guest',
+        timestamp: new Date().toISOString()
+    });
+
+    localStorage.setItem('bookella_audit_logs', JSON.stringify(logs.slice(0, 1000)));
 }
 
 // إغلاق النوافذ عند النقر خارجها
