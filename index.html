@@ -51,7 +51,9 @@
                     <div class="flex items-center space-x-8 space-x-reverse">
                         <a href="#" class="nav-link text-gray-700 hover:text-green-600 font-medium">الرئيسية</a>
                         <a href="#services" class="nav-link text-gray-700 hover:text-green-600 font-medium">الخدمات</a>
+                        <a href="#readingTracker" class="nav-link text-gray-700 hover:text-green-600 font-medium">رحلة القراءة</a>
                         <a href="#about" class="nav-link text-gray-700 hover:text-green-600 font-medium">من نحن</a>
+                        <a href="order_tracking.html" class="nav-link text-gray-700 hover:text-green-600 font-medium">تتبع الطلب</a>
                         <a href="#contact" class="nav-link text-gray-700 hover:text-green-600 font-medium">تواصل معنا</a>
                         <a href="bookella_loyalty_system.html" class="nav-link text-gray-700 hover:text-green-600 font-medium">نظام النقاط</a>
                     </div>
@@ -170,6 +172,96 @@
                         <h3 class="text-xl font-bold text-gray-800 mb-2">كتاب الشهر</h3>
                         <p class="text-gray-600 mb-2">أسرار النجاح في الحياة</p>
                         <p class="text-green-600 font-bold text-lg">200 جنيه</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reading Tracker Section -->
+    <section id="readingTracker" class="py-16 bg-gradient-to-b from-white to-green-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-3">رحلة القراءة الذكية</h2>
+                    <p class="text-gray-600">ابدأ بتتبع تقدمك في القراءة بطريقة بسيطة، تمهيدًا لتجربة Bookella الاجتماعية الكاملة.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">تحديث جلسة القراءة</h3>
+                        <form id="readingTrackerForm" class="space-y-4">
+                            <div>
+                                <label for="trackerBookName" class="block text-sm font-medium text-gray-700 mb-2">اسم الكتاب الحالي</label>
+                                <input id="trackerBookName" type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-green-500" placeholder="مثال: Atomic Habits">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="trackerCurrentPage" class="block text-sm font-medium text-gray-700 mb-2">الصفحة الحالية</label>
+                                    <input id="trackerCurrentPage" type="number" min="0" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-green-500" placeholder="120">
+                                </div>
+                                <div>
+                                    <label for="trackerTotalPages" class="block text-sm font-medium text-gray-700 mb-2">إجمالي الصفحات</label>
+                                    <input id="trackerTotalPages" type="number" min="1" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-green-500" placeholder="300">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="trackerBooksRead" class="block text-sm font-medium text-gray-700 mb-2">عدد الكتب المقروءة هذا العام</label>
+                                    <input id="trackerBooksRead" type="number" min="0" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-green-500" placeholder="8">
+                                </div>
+                                <div>
+                                    <label for="trackerYearGoal" class="block text-sm font-medium text-gray-700 mb-2">هدفك السنوي</label>
+                                    <input id="trackerYearGoal" type="number" min="1" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-green-500" placeholder="24">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-bold hover:from-green-600 hover:to-emerald-700 transition-all">
+                                حفظ التقدم
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">لوحة التقدم</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="text-sm text-gray-600">الكتاب الحالي</p>
+                                    <p id="currentBookLabel" class="text-sm font-semibold text-gray-800">لا يوجد كتاب محدد</p>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div id="bookProgressBar" class="h-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                                <p id="bookProgressText" class="text-xs text-gray-500 mt-2">0% مكتمل</p>
+                            </div>
+
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="text-sm text-gray-600">تحدي القراءة السنوي</p>
+                                    <p id="yearGoalLabel" class="text-sm font-semibold text-gray-800">0 / 12 كتاب</p>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div id="yearGoalProgressBar" class="h-3 bg-gradient-to-r from-blue-400 to-indigo-600 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                                <p id="yearGoalProgressText" class="text-xs text-gray-500 mt-2">ابدأ بإضافة كتبك المقروءة لتحقيق الهدف</p>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div class="bg-green-50 rounded-xl p-4">
+                                    <p class="text-xs text-gray-500">صفحات متبقية</p>
+                                    <p id="remainingPagesValue" class="text-xl font-bold text-green-700">0</p>
+                                </div>
+                                <div class="bg-blue-50 rounded-xl p-4">
+                                    <p class="text-xs text-gray-500">كتب متبقية</p>
+                                    <p id="remainingBooksValue" class="text-xl font-bold text-blue-700">12</p>
+                                </div>
+                                <div class="bg-purple-50 rounded-xl p-4">
+                                    <p class="text-xs text-gray-500">حالة اليوم</p>
+                                    <p id="readingMotivation" class="text-sm font-bold text-purple-700">ابدأ الآن 🚀</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -742,18 +834,38 @@
             <form id="checkoutForm" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
-                        <label for="customerName" class="required">الاسم الكامل</label>
-                        <input type="text" id="customerName" required>
+                        <label for="customerName" class="required">الاسم ثلاثي</label>
+                        <input type="text" id="customerName" required placeholder="مثال: محمد أحمد علي">
                     </div>
 
                     <div class="form-group">
-                        <label for="customerPhone" class="required">رقم الهاتف</label>
-                        <input type="tel" id="customerPhone" required>
+                        <label for="customerPhone" class="required">رقم الموبايل</label>
+                        <input type="tel" id="customerPhone" required placeholder="01xxxxxxxxx">
                     </div>
 
                     <div class="form-group">
-                        <label for="customerPhoneAlt" class="required">رقم هاتف بديل</label>
-                        <input type="tel" id="customerPhoneAlt" required>
+                        <label for="governorate" class="required">المحافظة</label>
+                        <input type="text" id="governorate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city" class="required">المدينة</label>
+                        <input type="text" id="city" required>
+                    </div>
+
+                    <div class="form-group md:col-span-2">
+                        <label for="customerAddress" class="required">العنوان بالتفصيل</label>
+                        <textarea id="customerAddress" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nearestPost" class="optional">أقرب بريد (اختياري)</label>
+                        <input type="text" id="nearestPost" placeholder="اختياري">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhoneAlt" class="optional">رقم احتياطي (اختياري)</label>
+                        <input type="tel" id="customerPhoneAlt" placeholder="اختياري">
                     </div>
 
                     <div class="form-group">
@@ -767,11 +879,6 @@
                     <textarea id="bookNames" rows="3" readonly></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="customerAddress" class="required">العنوان بالتفصيل</label>
-                    <textarea id="customerAddress" rows="3" required></textarea>
-                </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
                         <label for="totalPrice" class="required">إجمالي السعر</label>
@@ -783,6 +890,7 @@
                         <input type="text" id="discountCode" placeholder="اختياري">
                     </div>
                 </div>
+                <div id="whatsAppCTA" class="hidden bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800"></div>
 
                 <div class="flex gap-4 pt-4">
                     <button type="button" onclick="closeCheckout()" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors" title="إلغاء الطلب">
